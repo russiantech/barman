@@ -1,7 +1,7 @@
 from flask_migrate import Migrate
 from flask_mail import Mail
 from flask_moment import Moment
-from flask_session import Session
+# from flask_session import Session
 from authlib.integrations.flask_client import OAuth
 from flask_wtf.csrf import CSRFProtect
 from web.models import db, bcrypt, s_manager
@@ -12,17 +12,31 @@ load_dotenv()
 from os import getenv
 
 # Initialize extensions
-f_session = Session()
+# f_session = Session()
 mail = Mail()
 migrate = Migrate()
 moment = Moment()
 oauth = OAuth()
 csrf = CSRFProtect()
 
-from redis import Redis
-# Initialize Redis client
-redis = Redis.from_url(getenv('REDIS_URL', 'redis://localhost:6379/0'))
+# Determine the environment and set the Redis URL accordingly
+if getenv('FLASK_ENV') == 'production':
+    redis_url = getenv('REDIS_URL', 'redis://localhost:6379/0')  # Fallback if not set
+else:
+    redis_url = getenv('REDIS_URL_DEV', 'redis://localhost:6379/0')  # Fallback if not set
 
+# Initialize Redis client
+from redis import Redis
+redis = Redis.from_url(redis_url)
+
+# from flask_limiter import Limiter
+# from flask_limiter.util import get_remote_address
+# # Initialize Flask-Limiter with IP-based rate limiting
+# limiter = Limiter(
+#     key_func=get_remote_address,
+#     default_limits=["1 per second", "5 per minute"],  # Allow up to 1 request per second or a burst of 5 in a minute
+#     storage_uri=redis_url  # Use the same Redis URL for limiting
+# )
 
 def config_app(app, config_name):
     """Configure app settings based on environment."""
@@ -32,7 +46,7 @@ def config_app(app, config_name):
 def init_ext(app):
     """Initialize all extensions."""
     db.init_app(app)
-    f_session.init_app(app)
+    # f_session.init_app(app)
     bcrypt.init_app(app)
     s_manager.init_app(app)
     mail.init_app(app)
