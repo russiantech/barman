@@ -19,6 +19,10 @@ moment = Moment()
 oauth = OAuth()
 csrf = CSRFProtect()
 
+from redis import Redis
+# Initialize Redis client
+redis = Redis.from_url(getenv('REDIS_URL', 'redis://localhost:6379/0'))
+
 
 def config_app(app, config_name):
     """Configure app settings based on environment."""

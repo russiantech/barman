@@ -1,5 +1,5 @@
 from flask import Flask
-from web.extensions import config_app, init_ext, make_available
+from web.extensions import config_app, init_ext, make_available, redis
 from web.utils.helpers import slugify, categ, find_dept_by_name, calc_percent, is_active
 from datetime import datetime
 from calendar import month_abbr
@@ -12,6 +12,7 @@ def create_app(config_name='development'):
         config_app(app, config_name)
         init_ext(app)
         app.context_processor(make_available) # make some-data available in the context through-out
+        app.redis = redis
         
         # Register Blueprints
         from web.auth.routes import auth

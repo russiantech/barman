@@ -6,7 +6,6 @@ from web import create_app
 # app = create_app('development')  # Set to 'production' if needed
 app = create_app('production')  # Set to 'production' if needed
 from flask import jsonify
-print(app.config['SQLALCHEMY_DATABASE_URI'])
 @app.route("/routes")
 def site_map():
     links = []

@@ -1,6 +1,8 @@
 
 from os import getenv
 
+from redis import Redis
+
 class Config:
     
     # Security
@@ -46,9 +48,15 @@ class Config:
     ALLOWED_EXTENSIONS = getenv('ALLOWED_EXTENSIONS', 'jpg, jpeg, png, gif, mov, mp4').split(',')
 
     # Session
-    SESSION_TYPE = 'filesystem'
+    # SESSION_TYPE = 'filesystem'
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True  # Ensure HTTPS
+
+    SESSION_TYPE = 'redis'
+    SESSION_PERMANENT = False
+    SESSION_USE_SIGNER = True
+    SESSION_KEY_PREFIX = 'T'
+    SESSION_REDIS = Redis(host='localhost', port=6379)
 
 class DevelopmentConfig(Config):
     """Development-specific configuration."""
@@ -62,6 +70,8 @@ class DevelopmentConfig(Config):
     MAIL_PORT = getenv('mailtrap_port')
     MAIL_USERNAME = getenv('mailtrap_username')
     MAIL_PASSWORD = getenv('mailtrap_password')
+    
+    SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI_DEV')
 
 class TestingConfig(Config):
     """Testing-specific configuration."""
@@ -86,6 +96,8 @@ class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = (
         f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?collation=utf8mb4_general_ci"
     )
+    
+    SESSION_REDIS = Redis(host=getenv('REDIS_HOST'), port=6379)
 
     DEFAULT_MAIL_SENDER = getenv('DEFAULT_MAIL_SENDER')
     MAIL_SERVER = getenv('MAIL_SERVER')
@@ -93,14 +105,13 @@ class ProductionConfig(Config):
     MAIL_USERNAME = getenv('MAIL_USERNAME')
     MAIL_PASSWORD = getenv('MAIL_PASSWORD')
 
-
     SQLALCHEMY_ECHO = False
     # Add production-specific settings here
     
-    """ prevents Shared Session Cookies #// so that other similar browsers would not have access to same first logged-in user account """
+    """ prevents Shared Session Cookies [so that other similar browsers would not have access to same first logged-in user account] """
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True  # If using HTTPS
-    """  SESSION_TYPE = 'redis' # 'filesystem', 'mongodb' etc #//only suitable for small projects """
+    SESSION_TYPE = 'redis' # 'filesystem', 'mongodb' etc #//only suitable for small projects """
 
 app_config = {
     'testing': TestingConfig,
