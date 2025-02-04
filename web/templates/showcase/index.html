@@ -250,7 +250,7 @@
 									{% else %}
 									<a data-bs-toggle="modal" data-bs-target="#signinModal" 
 									class="btn btn-lg btn-dark rounded-pill border-0 shadow-none px-lg-8">
-									Explore more</a>
+									Explore barman</a>
 									{% endif %}
 								</div>
 						</div>
@@ -954,15 +954,16 @@
 				<div class="row mt-5 mb-7">
 					<div class="col">
 						<ul class="nav mx-n4">
-							<li class="nav-item"><a href="#" class="nav-link text-lg text-muted text-primary-hover"><i
+							<li class="nav-item"><a href="{{x_link}}" class="nav-link text-lg text-muted text-primary-hover"><i
 										class="bi bi-twitter"></i></a></li>
-							<li class="nav-item"><a href="#" class="nav-link text-lg text-muted text-primary-hover"><i
+							<li class="nav-item"><a href="{{fb_link}}" class="nav-link text-lg text-muted text-primary-hover"><i
 										class="bi bi-facebook"></i></a></li>
-							<li class="nav-item"><a href="" class="nav-link text-lg text-muted  text-primary-hover"><i
+							<li class="nav-item">
+								<a href="{{github_link}}" class="nav-link text-lg text-muted  text-primary-hover"><i
 										class="bi bi-github"></i></a></li>
-							<li class="nav-item"><a href="#" class="nav-link text-lg text-muted text-primary-hover"><i
+							<li class="nav-item"><a href="{{instagram_link}}" class="nav-link text-lg text-muted text-primary-hover"><i
 										class="bi bi-instagram"></i></a></li>
-							<li class="nav-item"><a href="#" class="nav-link text-lg text-muted text-primary-hover"><i
+							<li class="nav-item"><a href="{{whatsapp_link}}" class="nav-link text-lg text-muted text-primary-hover"><i
 										class="bi bi-whatsapp"></i></a></li>
 						</ul>
 					</div>
@@ -971,10 +972,14 @@
 					<div class="col-auto">
 						<a href="https://techa.tech">
 							<p class="text-sm text-muted">
-								&copy; Copyright 2024 Barman . Techa - Precision in profits, inventory, & insights for
+								&copy; Copyright <small id="copyright">2030</small> Barman . Techa - Precision in profits, inventory, & insights for
 								Growth!.
 							</p>
 						</a>
+						<script>
+							document.getElementById('copyright').innerHTML = new Date().getFullYear()
+							// document.getElementById('copyright').innerHTML += new Date().getFullYear()
+						</script>
 					</div>
 				</div>
 			</div>
@@ -1184,14 +1189,14 @@
 					
 						<div class="row g-2">
 							<div class="col-sm-6">
-								<a href="#" class="btn btn-neutral w-100">
+								<a href="#" class="btn btn-neutral w-100 disabled">
 									<span class="icon icon-sm pe-2">
 										<i class="bi bi-github"></i>
 									</span>Github
 								</a>
 							</div>
 							<div class="col-sm-6">
-								<a href="#" class="btn btn-neutral w-100">
+								<a href="#" class="btn btn-neutral w-100 disabled">
 									<span class="icon icon-sm pe-2">
 										<i class="bi bi-google"></i>
 									</span>Google
@@ -1259,23 +1264,23 @@
 						<div class="py-2 text-center">
 							<span class="text-xs text-uppercase fw-semibold text-warning">or</span>
 						</div>
-					
 						<div class="row g-2">
 							<div class="col-sm-6">
-								<a href="#" class="btn btn-neutral w-100">
+								<button class="btn btn-neutral w-100 disabled">
 									<span class="icon icon-sm pe-2">
 										<i class="bi bi-github"></i>
 									</span>Github
-								</a>
+								</button>
 							</div>
 							<div class="col-sm-6">
-								<a href="#" class="btn btn-neutral w-100">
+								<button class="btn btn-neutral w-100 disabled">
 									<span class="icon icon-sm pe-2">
 										<i class="bi bi-google"></i>
 									</span>Google
-								</a>
+								</button>
 							</div>
 						</div>
+						
 					</div>
 					
 
@@ -1383,8 +1388,25 @@
 	</div>
 
 	<!--  -->
-	
 	<!-- Modal for Displaying Messages -->
+  <!-- Modal for Displaying Messages -->
+  <div id="response_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="responseModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="responseModalLabel">Response</h5>
+		  <!-- Close button to dismiss the modal -
+		  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+		</div>
+		<div class="modal-body">
+		  <p id="response_text" class="text-warning fw-bold"></p>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <!--  -->
+
+	<!-- Modal for Displaying Messages --
 	<div id="response_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -1425,13 +1447,9 @@
 					<div class="modal-content">
 					  <div class="modal-header">
 						<h5 class="modal-title">Notification</h5>
-						<button type="button" class="btn-close btn-outline-warning" data-bs-dismiss="modal" aria-label="Close"></button>
 					  </div>
 					  <div class="modal-body">
-						<p>${message}</p>
-					  </div>
-					  <div class="modal-footer">
-						<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+						<p class="fw-bold text-warning">${message}</p>
 					  </div>
 					</div>
 				  </div>
@@ -1614,6 +1632,7 @@
 		
 					// Iterate through plans and generate HTML
 					$.each(data.data, function (_, plan) {
+						
 						const cardBackgroundClass = {
 							weekly: "text-bg-primary",
 							monthly: "text-bg-dark",
@@ -1625,12 +1644,18 @@
 							monthly: "Get started now",
 							yearly: "Get InventoryPro",
 						}[plan.plan_type.toLowerCase()] || "Explore the plan";
+
+						const planIconColor = {
+							weekly: `bg-primary-subtle text-primary`,
+							monthly: `bg-secondary-subtle text-secondary`,
+							yearly: `bg-dark-subtle text-dark`,
+						}[plan.plan_type.toLowerCase()] || `bg-primary-subtle text-primary`;
 		
 						const planFeatures = plan.plan_features
 							.map(
 								(feature) =>
 									`<li class="py-2 d-flex align-items-center">
-										<div class="icon icon-xs text-base icon-shape rounded-circle bg-primary-subtle text-primary me-3">
+										<div class="icon icon-xs text-base icon-shape rounded-circle ${planIconColor} me-3">
 											<i class="bi bi-check"></i>
 										</div>
 										<p>${feature}</p>

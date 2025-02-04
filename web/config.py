@@ -13,7 +13,7 @@ class Config:
     WTF_CSRF_ENABLED = False  # Disable CSRF for development/testing
 
     # Database
-    SQLALCHEMY_DATABASE_URI = getenv('DATABASE_URI') or 'sqlite:///'
+    SQLALCHEMY_DATABASE_URI = getenv('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_POOL_SIZE = 50
     SQLALCHEMY_POOL_TIMEOUT = 30
@@ -68,17 +68,31 @@ class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///'  # In-memory database for tests
 
-
 class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     FLASK_ENV = 'production'
     MAIL_DEBUG = False
-    DEFAULT_MAIL_SENDER = getenv('DEFAULT_MAIL_SENDER') 
-    MAIL_SERVER = getenv('mail_server')
-    MAIL_PORT = getenv('mail_port')
-    MAIL_USERNAME = getenv('mail_username')
-    MAIL_PASSWORD = getenv('mail_password')
+
+    # Database configuration
+    DB_USERNAME = getenv('DB_USERNAME', 'techa')  
+    DB_PASSWORD = getenv('DB_PASSWORD', 'Techa.Tech500')  
+    DB_HOST = getenv('DB_HOST', 'localhost')  
+    DB_PORT = getenv('DB_PORT', '3306')
+    DB_NAME = getenv('DB_NAME', 'barman_db')  
+
+    # Construct the SQLAlchemy database URI
+    # SQLALCHEMY_DATABASE_URI = 'sqlite:///barman_db.sqlite3' 
+    SQLALCHEMY_DATABASE_URI = (
+        f"mysql+mysqlconnector://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}?collation=utf8mb4_general_ci"
+    )
+
+    DEFAULT_MAIL_SENDER = getenv('DEFAULT_MAIL_SENDER')
+    MAIL_SERVER = getenv('MAIL_SERVER')
+    MAIL_PORT = getenv('MAIL_PORT')
+    MAIL_USERNAME = getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = getenv('MAIL_PASSWORD')
+
 
     SQLALCHEMY_ECHO = False
     # Add production-specific settings here

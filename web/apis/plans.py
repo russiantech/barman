@@ -1,3 +1,4 @@
+import traceback
 from flask import request, Blueprint
 from web.models import db
 from web.apis.utils.helpers import success_response, error_response
@@ -52,6 +53,7 @@ def create_plan():
         db.session.commit()
         return success_response("Plan created successfully.", data=new_plan.to_dict(), status_code=201)
     except Exception as e:
+        traceback.print_exc()
         return error_response(f"An error occurred: {str(e)}")
 
 @plan_bp.route('/plans/<int:id>', methods=['PUT'])

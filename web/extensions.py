@@ -46,12 +46,14 @@ def make_available():
         'app_location': 'Graceland Estate, Lekki, Lagos, Nigeria.',
         'app_email': 'hi@techa.tech',
         'app_logo': getenv('logo_url'),
+        'github_link': 'https://www.github.com/russiantech',
+        'whatsapp_link': 'https://chat.whatsapp.com/Ipqr601PAFO6D9lkTd4Lm4',
         'fb_link': 'https://www.facebook.com/Chrisjsmes.fb.co',
         'x_link': 'https://twitter.com/chris_jsmes',
         'instagram_link': 'https://www.instagram.com/chrisjsmz/',
         'linkedin_link': 'www.linkedin.com/in/chrisjsm',
         'dribble_link': 'https://dribbble.com/chrisjsm',
-        'youtube_link': 'https://www.facebook.com/Chrisjsmes.fb.co',
+        'youtube_link': 'https://www.facebook.com/russiantech',
         'utchannel_link': 'https://www.youtube.com/@russian_developer',
     }
 

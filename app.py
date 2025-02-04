@@ -2,11 +2,11 @@ from web import create_app
 # from dotenv import load_dotenv
 # load_dotenv() # Load env variables from .env file
 
-app = create_app()
-
+# app = create_app()
 # app = create_app('development')  # Set to 'production' if needed
-# app = create_app('production')  # Set to 'production' if needed
+app = create_app('production')  # Set to 'production' if needed
 from flask import jsonify
+print(app.config['SQLALCHEMY_DATABASE_URI'])
 @app.route("/routes")
 def site_map():
     links = []
@@ -18,5 +18,5 @@ def site_map():
 
 if __name__ == '__main__':
     #app.run() 
-    app.run(debug=True, port=8001)
+    app.run(host='0.0.0.0', debug=True, port=5000)
 
