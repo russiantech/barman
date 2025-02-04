@@ -24,15 +24,15 @@ def load_user(user_id):
 
 user_role_association = db.Table(
     'user_role_association',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id')),
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id'), primary_key=True),
     keep_existing=True
 )
 
 apportion_items_association = db.Table(
     'apportion_items_association',
-    db.Column('apportion_id', db.Integer, db.ForeignKey('apportion.id')),
-    db.Column('items_id', db.Integer, db.ForeignKey('items.id')),
+    db.Column('apportion_id', db.Integer, db.ForeignKey('apportion.id'), primary_key=True),
+    db.Column('items_id', db.Integer, db.ForeignKey('items.id'), primary_key=True),
     db.Column('deleted', db.Boolean, default=False)  # Add a 'deleted' column
 )
 
